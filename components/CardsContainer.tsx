@@ -1,6 +1,7 @@
 import dataSet from "@/types/dataSet";
 import React, { Dispatch, SetStateAction } from "react";
 import Card from "./Card";
+import SmallWindow from "./SmallWindow";
 
 type Props = {
 	level: number;
@@ -10,6 +11,8 @@ type Props = {
 	mode: string;
 	setGameOver: Dispatch<SetStateAction<boolean>>;
 	setScore: Dispatch<SetStateAction<number>>;
+    loading: boolean
+    setLoading: Dispatch<SetStateAction<boolean>>
 };
 
 export const getCats = async (num: number) => {
@@ -44,7 +47,11 @@ const CardsContainer = async ({
 	mode,
 	setGameOver,
 	setScore,
+    loading,
+    setLoading
 }: Props) => {
+
+    
 	const getCardsCount = () => {
 		return 2 * level;
 	};
@@ -73,6 +80,7 @@ const CardsContainer = async ({
 		};
 
 		if (allClicked()) {
+            setLoading(true);
 			switch (mode) {
 				case "easy":
 					setLevel(level + 1);
@@ -120,24 +128,45 @@ const CardsContainer = async ({
 
 	return (
 		<section
-			className={`m-auto flex flex-wrap items-center justify-center gap-6 p-6 md:p-12 md:gap-12 lg:gap-24 lg:p-24`}
+			className={`m-auto`}
 		>
-			{dataArray.length > 0 &&
-				dataArray.map((data) => {
-					if (data.clicked === undefined) data.clicked = false;
-					return (
-						<Card
-							key={data.id}
-							url={data.url}
-							id={data.id}
-							cardCount={getCardsCount()}
-							onClick={() => {
-								handleClick(data);
-								scramblePictures();
-							}}
-						/>
-					);
-				})}
+            {
+                loading
+                ? 
+                    <SmallWindow>
+                        <h2 className="text-4xl">Level Complete! Shaking the treats bag...</h2>
+                    </SmallWindow>
+                    
+                    
+                : null
+            }
+
+            <div className={`${loading ? 'invisible ' : ''}flex flex-wrap items-center justify-center gap-6 p-6 md:p-12 md:gap-12`}>
+                {dataArray.length > 0 &&
+                    dataArray.map((data) => {
+                        if (data.clicked === undefined) data.clicked = false;
+                        return (
+                            <Card
+                                key={data.id}
+                                url={data.url}
+                                id={data.id}
+                                onClick={() => {
+                                    handleClick(data);
+                                    scramblePictures();
+                                }}
+                                onLoad={() => {
+                                    data.loaded = true
+                                    dataArray.forEach(img => {
+                                        if (img.loaded === false || img.loaded === undefined) return 
+                                        setLoading(false)
+                                    })
+                                }}
+                            />
+                        );
+                    })
+                }
+            </div>
+
 		</section>
 	);
 };
