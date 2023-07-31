@@ -45,7 +45,6 @@ export default function Home() {
                     />
 
                     <Suspense fallback='...Cleaning Litter Boxes'>
-                        {/* @ts-expect-error Server Component */}
                         <CardsContainer
                             level={level}
                             setLevel={setLevel}
