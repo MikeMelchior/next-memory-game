@@ -1,15 +1,15 @@
 "use client";
 import Image from "next/image";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, ReactEventHandler } from "react";
 
 type Props = {
 	url: string;
-	cardCount: number;
 	id: string;
 	onClick: MouseEventHandler
+    onLoad: ReactEventHandler
 };
 
-const Card = ({ url, cardCount, id, onClick }: Props) => {
+const Card = ({ url, id, onClick, onLoad }: Props) => {
 
 
 
@@ -20,8 +20,9 @@ const Card = ({ url, cardCount, id, onClick }: Props) => {
 			id={id}
 			width={900}
 			height={1200}
-			className={`place-self-stretch h-[200px] w-[300px] rounded-xl`}
+			className={`place-self-stretch h-[145px] w-[200px] rounded-xl`}
 			onClick={onClick}
+            onLoad={onLoad}
 		/>
 	);
 };
