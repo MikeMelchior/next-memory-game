@@ -16,15 +16,16 @@ export default function Home() {
 	const [dataArray, setDataArray] = useState<dataSet[]>([]);
     const [score, setScore] = useState<number>(0)
     const [highScore, setHighScore] = useState<number>(0)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         if (score > highScore) setHighScore(score)
     }, [score, highScore])
 
 	return (
-		<main className="flex flex-col h-screen w-screen">
+		<main className="relative flex flex-col min-h-screen h-full w-screen">
             
-			<div className="absolute w-screen h-screen bg-main-background opacity-30 -z-10"></div>
+			<div className="absolute h-full w-full bg-main-background opacity-30 -z-10"></div>
 
 			{
                 level === 0 &&
@@ -53,6 +54,8 @@ export default function Home() {
                             mode={mode}
                             setGameOver={setGameOver}
                             setScore={setScore}
+                            loading={loading}
+                            setLoading={setLoading}
                         />
                     </Suspense>
 
